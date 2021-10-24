@@ -4,6 +4,8 @@ var ctx = c.getContext("2d");
 height = c.clientHeight;
 width = c.clientWidth;
 
+endGame = false;
+
 
 ctx.rect(0,0,width,height);
 ctx.fillStyle = "green";
@@ -122,6 +124,40 @@ function releaseKey(e)
     if (e.key == "ArrowDown")
     {
         direction["ArrowDown"] = false;
+    }
+}
+
+function moveCar(car)
+{
+    if (direction["ArrowRight"])
+    {
+        car.x += 5;
+
+        if ((car.x + car.x_size  > 600))
+        {
+            endGame = true;
+        }
+    }else if (direction["ArrowLeft"])
+    {
+        car.x -= 5
+
+        if ((car.x + car.x_size  < 200))
+        {
+            endGame = true;
+        }
+    }
+    else if (direction["ArrowUp"])
+    {
+        car.y -= 5;
+    }
+    else if (direction["ArrowDown"])
+    {
+        car.y +=5;
+
+        if (car.y + car.y_size)
+        {
+            endGame = true;
+        }
     }
 }
 
