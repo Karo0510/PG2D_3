@@ -183,4 +183,7 @@ function animate()
 //window.requestAnimationFrame(moveCar);
 setInterval(animate, 10);
 
+//poprawic plansze
+//dowiedziec sie, jak dziala requestAnimationFrame
+
 
