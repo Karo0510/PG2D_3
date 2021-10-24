@@ -28,10 +28,11 @@ function drawStraightRoad()
 
 function drawDashLine()
 {
-    ctx.beginPath();
-    ctx.setLineDash([10, 10]);
+    //ctx.beginPath();
+    ctx.setLineDash([20, 20]);
     ctx.moveTo(400, 0);
     ctx.lineTo(400, 600);
+    //ctx.lineWidth = 10;
     ctx.strokeStyle = '#ffffff';
     ctx.stroke();
 } 
@@ -51,8 +52,8 @@ function board()
 {
     drawStraightRoad();
     drawDashLine();
-    drawStripes(180);
-    drawStripes(600);
+    //drawStripes(180);
+    //drawStripes(600);
 }
 
 class Car
@@ -83,6 +84,14 @@ car.drawCar();
 
 document.addEventListener("keydown", pressKey, false);
 document.addEventListener("keyup", releaseKey, false);
+
+function clear()
+{
+    ctx.rect(0,0,width,height);
+    ctx.fillStyle = "green";
+    ctx.fill();
+    ctx.stroke();
+}
 
 function pressKey(e)
 {
@@ -160,5 +169,18 @@ function moveCar(car)
         }
     }
 }
+
+function animate()
+{
+    
+    clear();
+    board();
+    moveCar(car);
+    car.drawCar();
+
+}
+
+//window.requestAnimationFrame(moveCar);
+setInterval(animate, 10);
 
 
