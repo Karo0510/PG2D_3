@@ -10,6 +10,8 @@ ctx.fillStyle = "green";
 ctx.fill();
 ctx.stroke();
 
+var direction = {"ArrowUp": false, "ArrowDown": false, "ArrowLeft": false, "ArrowRight": false};
+
 function drawStraightRoad()
 {
     ctx.beginPath();
@@ -36,8 +38,8 @@ function drawStripes(x)
 {
     ctx.beginPath();
     ctx.setLineDash([20,20]);
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, 600);
+    ctx.moveTo(x+10, 0);
+    ctx.lineTo(x+10, 600);
     ctx.lineWidth = 20;
     ctx.strokeStyle = 'red';
     ctx.stroke();
@@ -47,12 +49,9 @@ function board()
 {
     drawStraightRoad();
     drawDashLine();
-    drawStripes(200);
+    drawStripes(180);
     drawStripes(600);
 }
-
-
-board();
 
 class Car
 {
@@ -63,17 +62,67 @@ class Car
         this.x_size = x_size;
         this.y_size = y_size;
     }
+
     drawCar()
     {
         ctx.beginPath();
         ctx.rect(this.x, this.y, this.x_size, this.y_size);
         ctx.fillStyle = "blue";
         ctx.fill();
-        ctx.stroke();
+        //ctx.stroke();
     }
 }
 
-car = new Car(400, 400, 40, 20);
+board();
+
+car = new Car(300, 300, 40, 60);
 car.drawCar();
+
+
+document.addEventListener("keydown", pressKey, false);
+document.addEventListener("keyup", releaseKey, false);
+
+function pressKey(e)
+{
+    if (e.key == "ArrowRight")
+    {
+        direction["ArrowRight"] = true;
+    }
+    
+    if (e.key == "ArrowLeft")
+    {
+        direction["ArrowLeft"] = true;
+    }
+    if (e.key == "ArrowUp")
+    {
+        direction["ArrowUp"] = true;
+    }
+    if (e.key == "ArrowDown")
+    {
+        direction["ArrowDown"] = true;
+    }
+
+}
+
+function releaseKey(e)
+{
+    if (e.key == "ArrowRight")
+    {
+        direction["ArrowRight"] = false;
+    }
+    
+    if (e.key == "ArrowLeft")
+    {
+        direction["ArrowLeft"] = false;
+    }
+    if (e.key == "ArrowUp")
+    {
+        direction["ArrowUp"] = false;
+    }
+    if (e.key == "ArrowDown")
+    {
+        direction["ArrowDown"] = false;
+    }
+}
 
 
