@@ -37,7 +37,7 @@ function drawStripes(x)
     ctx.beginPath();
     ctx.setLineDash([20,20]);
     ctx.moveTo(x, 0);
-    ctx.lineTo(y, 600);
+    ctx.lineTo(x, 600);
     ctx.lineWidth = 20;
     ctx.strokeStyle = 'red';
     ctx.stroke();
@@ -53,5 +53,27 @@ function board()
 
 
 board();
+
+class Car
+{
+    constructor(x, y, x_size, y_size)
+    {
+        this.x = x;
+        this.y = y;
+        this.x_size = x_size;
+        this.y_size = y_size;
+    }
+    drawCar()
+    {
+        ctx.beginPath();
+        ctx.rect(this.x, this.y, this.x_size, this.y_size);
+        ctx.fillStyle = "blue";
+        ctx.fill();
+        ctx.stroke();
+    }
+}
+
+car = new Car(400, 400, 40, 20);
+car.drawCar();
 
 
