@@ -6,6 +6,8 @@ width = c.clientWidth;
 
 endGame = false;
 
+stripesArray = []
+sholderStripesArray = []
 
 ctx.rect(0,0,width,height);
 ctx.fillStyle = "green";
@@ -14,11 +16,41 @@ ctx.stroke();
 
 var direction = {"ArrowUp": false, "ArrowDown": false, "ArrowLeft": false, "ArrowRight": false};
 
+class Stripes
+{
+    constructor(x, y, x_size, y_size, dy)
+    {
+        this.x = x;
+        this.y = y;
+        this.x_size = x_size;
+        this.y_size = y_size;
+        this.dy = dy;
+    }
+
+    draw()
+    {
+        ctx.beginPath();
+        ctx.rect(this.x, this.y, this.x_size, this.y_size);
+        ctx.fillStyle = "white";
+        ctx.fill();
+    }
+
+    moveStripes()
+    {
+        this.y += this.dy;
+
+        if (this.y >= 800)
+        {
+            this.y = 0;
+        }
+    }
+}
+
 function drawStraightRoad()
 {
     ctx.beginPath();
     ctx.rect(200, 0, 400, height);
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "grey";
     ctx.fill();
     ctx.stroke();
     ctx.closePath();
@@ -26,34 +58,32 @@ function drawStraightRoad()
   
 }
 
-function drawDashLine()
+function initStripes(x, y, x_size, y_size, dy)
 {
-    //ctx.beginPath();
-    ctx.setLineDash([20, 20]);
-    ctx.moveTo(400, 0);
-    ctx.lineTo(400, 600);
-    //ctx.lineWidth = 10;
-    ctx.strokeStyle = '#ffffff';
-    ctx.stroke();
-} 
-
-function drawStripes(x)
-{
-    ctx.beginPath();
-    ctx.setLineDash([20,20]);
-    ctx.moveTo(x+10, 0);
-    ctx.lineTo(x+10, 600);
-    ctx.lineWidth = 20;
-    ctx.strokeStyle = 'red';
-    ctx.stroke();
+    for (var i = 0; i<800; i = i+20+y_size)
+    {
+        str =  new Stripes(x, y+i, x_size, y_size, dy);
+        stripesArray.push(str);
+    }
 }
+
+function updateStripes()
+{
+    for (var i = 0; i<stripesArray.length; i++)
+    {
+        stripesArray[i].moveStripes();
+        stripesArray[i].draw();
+    }
+}
+
+
 
 function board()
 {
     drawStraightRoad();
-    drawDashLine();
     //drawStripes(180);
     //drawStripes(600);
+    updateStripes();
 }
 
 class Car
@@ -76,10 +106,14 @@ class Car
     }
 }
 
-board();
+initStripes(380, 0, 20, 80, 5, stripesArray);
+initStripes()
+
 
 car = new Car(300, 300, 40, 60);
 car.drawCar();
+
+
 
 
 document.addEventListener("keydown", pressKey, false);
@@ -177,7 +211,6 @@ function animate()
     board();
     moveCar(car);
     car.drawCar();
-
 }
 
 //window.requestAnimationFrame(moveCar);
