@@ -39,28 +39,26 @@ class Stripes
     {
         this.y += this.dy;
 
-        if (this.y >= 800)
+        if (this.y >= height)
         {
-            this.y = 0;
+            this.y = height - this.y;
         }
     }
 }
 
-function drawStraightRoad()
+function drawStraightRoad(x, y, x_size, y_size, color)
 {
     ctx.beginPath();
-    ctx.rect(200, 0, 400, height);
-    ctx.fillStyle = "grey";
+    ctx.rect(x, y, x_size, y_size);
+    ctx.fillStyle = color;
     ctx.fill();
     ctx.stroke();
     ctx.closePath();
-
-  
 }
 
-function initStripes(x, y, x_size, y_size, dy)
+function initStripes(x, y, x_size, y_size, dy, dist_between_stripes)
 {
-    for (var i = 0; i<800; i = i+20+y_size)
+    for (var i = 0; i<800; i = i+dist_between_stripes+y_size)
     {
         str =  new Stripes(x, y+i, x_size, y_size, dy);
         stripesArray.push(str);
@@ -80,10 +78,10 @@ function updateStripes()
 
 function board()
 {
-    drawStraightRoad();
-    //drawStripes(180);
-    //drawStripes(600);
-    updateStripes();
+    drawStraightRoad(200, 0, 400, height, "grey");
+    drawStraightRoad(180, 0, 20, height, "red");
+    drawStraightRoad(600, 0, 20, height, "red");
+    updateStripes(stripesArray);
 }
 
 class Car
@@ -106,8 +104,10 @@ class Car
     }
 }
 
-initStripes(380, 0, 20, 80, 5, stripesArray);
-initStripes()
+initStripes(380, 0, 20, 80, 5, 40);
+initStripes(180, 0, 20, 20, 5, 40);
+initStripes(600, 0, 20, 20, 5, 40);
+
 
 
 car = new Car(300, 300, 40, 60);
