@@ -138,6 +138,10 @@ class Car
         
         //ctx.stroke();
     }
+    moveCarWithoutKey()
+    {
+        this.y += 2;
+    }
 }
 
 initStripes(380, 0, 20, 20, 5, 80);
@@ -151,7 +155,7 @@ car.drawCar();
 
 function collision(car)
 {
-    if ((car.x <= 200) || (car.x +car.x_size >=600))
+    if ((car.x <= 200) || (car.x +car.x_size >=600) || (car.y >= height))
     {
         return true;
     }
@@ -244,6 +248,10 @@ function moveCar(car)
         {
             endGame = true;
         }
+    }
+    else
+    {
+        car.moveCarWithoutKey();
     }
 }
 
