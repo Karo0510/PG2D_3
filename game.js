@@ -6,13 +6,10 @@ width = c.clientWidth;
 
 endGame = false;
 
-stripesArray = []
-sholderStripesArray = []
+stripesArray = [];
+sholderStripesArray = [];
 
-ctx.rect(0,0,width,height);
-ctx.fillStyle = "green";
-ctx.fill();
-ctx.stroke();
+var counter = 0;
 
 var direction = {"ArrowUp": false, "ArrowDown": false, "ArrowLeft": false, "ArrowRight": false};
 
@@ -93,6 +90,7 @@ function board()
     drawStraightRoad(180, 0, 20, height, "red");
     drawStraightRoad(600, 0, 20, height, "red");
     updateStripes();
+    //ctx.transform(1, 0, 0.01, 1, 0, 0);   
 }
 
 class Car
@@ -111,6 +109,33 @@ class Car
         ctx.rect(this.x, this.y, this.x_size, this.y_size);
         ctx.fillStyle = "blue";
         ctx.fill();
+        ctx.closePath();
+
+        ctx.beginPath();
+        ctx.arc(this.x,this.y+10,5,0,Math.PI*2,true);
+	    ctx.fillStyle = "blue";
+		ctx.fill();
+        ctx.closePath();
+
+        ctx.beginPath();
+        ctx.arc(this.x,this.y+this.y_size-10,5,0,Math.PI*2,true);
+	    ctx.fillStyle = "blue";
+		ctx.fill();
+        ctx.closePath();
+
+        ctx.beginPath();
+        ctx.arc( this.x + this.x_size , this.y+10 ,5,0,Math.PI*2,true);
+	    ctx.fillStyle = "blue";
+		ctx.fill();
+        ctx.closePath();
+
+        ctx.beginPath();
+        ctx.arc( this.x + this.x_size ,this.y+this.y_size-10 ,5,0,Math.PI*2,true);
+	    ctx.fillStyle = "blue";
+		ctx.fill();
+        ctx.closePath();
+
+        
         //ctx.stroke();
     }
 }
@@ -124,7 +149,15 @@ initStripes(600, 0, 20, 20, 5, 40);
 car = new Car(300, 300, 40, 60);
 car.drawCar();
 
+function collision(car)
+{
+    if ((car.x <= 200) || (car.x +car.x_size >=600))
+    {
+        return true;
+    }
 
+    return false;
+}
 
 
 document.addEventListener("keydown", pressKey, false);
@@ -135,7 +168,6 @@ function clear()
     ctx.rect(0,0,width,height);
     ctx.fillStyle = "green";
     ctx.fill();
-    ctx.stroke();
 }
 
 function pressKey(e)
@@ -217,17 +249,30 @@ function moveCar(car)
 
 function animate()
 {
-    
-    clear();
-    board();
     moveCar(car);
-    car.drawCar();
+
+    if (collision(car))
+    {
+        endGame = true;
+        alert('Game Over');
+       
+    }
+    else
+    {
+        clear();
+        board();
+        car.drawCar();
+        
+        ctx.restore();
+        window.requestAnimationFrame(animate);
+    }
+
+    
 }
 
-//window.requestAnimationFrame(moveCar);
-setInterval(animate, 10);
+window.onload = (animate);
 
-//poprawic plansze
-//dowiedziec sie, jak dziala requestAnimationFrame
+
+
 
 
