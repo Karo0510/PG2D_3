@@ -8,10 +8,39 @@ endGame = false;
 
 stripesArray = [];
 sholderStripesArray = [];
+obstacle = [];
+points = [];
+score = 0;
 
 var counter = 0;
 
 var direction = {"ArrowUp": false, "ArrowDown": false, "ArrowLeft": false, "ArrowRight": false};
+
+class Obstacle
+{
+    constructor(x, y, dy, x_size, y_size)
+    {
+        this.x = x;
+        this.y = y;
+        this.x_size = x_size;
+        this.y_size = y_size;
+        this.dy = dy;
+    }
+
+    moveObstacle(color)
+    {
+        this.draw(color);
+        this.y += this.dy;
+    }
+
+    draw(color)
+    {   
+        ctx.beginPath();
+        ctx.rect(this.x, this.y, this.x_size, this.y_size);
+        ctx.fillStyle = color;
+        ctx.fill();
+    }
+}
 
 class Stripes
 {
@@ -61,6 +90,49 @@ function initStripes(x, y, x_size, y_size, dy, dist_between_stripes)
     }
 }
 
+function addObstacle()
+{
+    x = Math.floor((Math.random() * 350) + 200);
+    
+    c = new Obstacle(x, 0, 5, 50, 50);
+    obstacle.push(c);
+}
+
+function addPoints()
+{
+    x = Math.floor((Math.random() * 400) + 200);
+
+    for (i = 0; i<obstacle.length;i++)
+    {
+        if ((x  < obstacle[i].x) || (x > obstacle[i] + 50))
+        {
+            c = new Obstacle(x, 0, 5, 10, 10);
+            points.push(c);
+        }
+    } 
+    
+}
+
+setInterval(addObstacle, 1000);
+setInterval(addPoints, 1000);
+
+function updateObstacle(color)
+{
+    for (var i = 0; i<obstacle.length; i++)
+    {
+        obstacle[i].moveObstacle(color);
+    }
+}
+
+function updatePoints(color)
+{
+    calculatePoints(10);
+    for (var i = 0; i<points.length; i++)
+    {
+        points[i].moveObstacle(color);
+    }
+}
+
 function updateStripes()
 {
     for (var i = 0; i<stripesArray.length; i++)
@@ -80,6 +152,26 @@ function updateStripes()
         
     }
 }
+
+function calculatePoints(point_size)
+{
+    for (var i = 0; i < points.length; i++)
+    {
+        x1 = points[i].x;
+        x2 = car.x;
+        y1 = points[i].y;
+        y2 = car.y;
+
+        if ((car.x <= points[i].x + point_size) && (car.x + car.x_size >= points[i].x) && (points[i].y + point_size >= car.y) && (points[i].y <= car.y + car.y_size))
+        {
+            score +=1;
+            points.splice(i, 1);
+        }
+
+    }
+}
+
+
 
 
 
@@ -158,6 +250,20 @@ function collision(car)
     if ((car.x <= 200) || (car.x +car.x_size >=600) || (car.y >= height))
     {
         return true;
+    }
+
+    for (var i = 0; i < obstacle.length; i++)
+    {
+        x1 = obstacle[i].x;
+        x2 = car.x;
+        y1 = obstacle[i].y;
+        y2 = car.y;
+
+        if ((car.x <= obstacle[i].x + 50) && (car.x + car.x_size >= obstacle[i].x) && (obstacle[i].y + 50 >= car.y) && (obstacle[i].y <= car.y + car.y_size))
+        {
+            return true;
+        }
+
     }
 
     return false;
@@ -255,6 +361,13 @@ function moveCar(car)
     }
 }
 
+function drawScore() 
+{
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "black";
+    ctx.fillText("Score: "+score, 8, 20);
+}
+
 function animate()
 {
     moveCar(car);
@@ -262,7 +375,7 @@ function animate()
     if (collision(car))
     {
         endGame = true;
-        alert('Game Over');
+        alert('Game Over. Aby zacząć od nowa grę, należy odświeżyć stronę');
        
     }
     else
@@ -270,6 +383,9 @@ function animate()
         clear();
         board();
         car.drawCar();
+        updateObstacle("yellow");
+        updatePoints("pink");
+        drawScore();
         
         ctx.restore();
         window.requestAnimationFrame(animate);
