@@ -12,6 +12,9 @@ obstacle = [];
 points = [];
 score = 0;
 
+x_direct = 0;
+counter = 0;
+
 var counter = 0;
 
 var direction = {"ArrowUp": false, "ArrowDown": false, "ArrowLeft": false, "ArrowRight": false};
@@ -121,6 +124,11 @@ function updateObstacle(color)
     for (var i = 0; i<obstacle.length; i++)
     {
         obstacle[i].moveObstacle(color);
+
+        if (obstacle[i].y >= 600)
+        {
+            obstacle.splice(i, 1);
+        }
     }
 }
 
